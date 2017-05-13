@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var priority_request = require('./routes/priority_request');
+var measurements = require('./routes/measurements');
 
 var app = express();
 
@@ -24,6 +25,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/priority', priority_request)
+app.use('/measurements', measurements)
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
