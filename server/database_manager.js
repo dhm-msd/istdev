@@ -34,6 +34,10 @@ exports.get_daily_measurements=function(date,machine_id,callback){
     this.executeQuery('SELECT time,value FROM measurements WHERE machine_id='+ machine_id +' AND time LIKE \''+date+'%\'',callback)
 }
 //Gets measurements data of a machine  by date and time from the database
-exports.getmeasurements=function(time,date,machine_id,callback){
+exports.get_measurement=function(time,date,machine_id,callback){
     this.executeQuery('SELECT time,value FROM measurements WHERE machine_id='+ machine_id +' AND time LIKE \''+date+' '+time+'\'',callback)
+}
+//Insert new measurement
+exports.new_measurement=function(machine_id,value,timestamp,callback){
+    this.executeQuery('INSERT into measurements(time,value,machine_id) VALUES ( '+timestamp+', '+value+','+machine_id+')',callback)
 }
