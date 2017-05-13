@@ -39,5 +39,5 @@ exports.get_measurement=function(time,date,machine_id,callback){
 }
 //Insert new measurement
 exports.new_measurement=function(machine_id,value,timestamp,callback){
-    this.executeQuery('INSERT into measurements(time,value,machine_id) VALUES ( '+timestamp+', '+value+','+machine_id+')',callback)
+    this.executeQuery('INSERT into measurements(time,value,machine_id) VALUES ( \''+timestamp+'\', '+value+','+machine_id+')',callback)
 }
