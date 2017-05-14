@@ -70,13 +70,13 @@ function updateMiddleware(req, res) {
     res.setHeader('Cache-Control', 'no-cache');
     res.writeHead(200);
     setTimeout(function() {
-        res.write("measurements\n");
+        //res.write("measurements\n");
     }, 9000);
     setTimeout(function() {
-        res.write("switch_on\n");
+        //res.write("switch_on\n");
     }, 10000);
     setTimeout(function() {
-        res.write("switch_off\n");
+        //res.write("switch_off\n");
     }, 15000);
     console.log(connected_clients)
 
