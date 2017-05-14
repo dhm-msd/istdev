@@ -20,12 +20,13 @@ async.parallel([
     //Connect to a server hook to receive commands
     var request = http.request({
         port: 3000,
-        host: '1.1.1.13',
+        host: '1.1.1.1',
         method: 'GET',
         path: '/update'
     });
     request.on('response', function( res ) {
         res.on('data', function( data ) {
+            //Messages/Commands Triggers
             switch(data.toString().toLowerCase()) {
                 case "measurements\n":
                     //dummy data
@@ -39,7 +40,7 @@ async.parallel([
                     //Request parameters
                     var api_request = http.request({
                        port:3000,
-                       host:'1.1.1.13',
+                       host:'1.1.1.1',
                        method: 'POST',
                        path: '/measurements',
                        headers: {
@@ -51,10 +52,34 @@ async.parallel([
                     api_request.write(post_data);
                     api_request.end();
                     break;
+                case "switch_on\n":
+                    gpio.write(11, false, function(){
+                        console.log("switched on by server request")
+                    });
+                    gpio.write(13, false, function(){
+                        console.log("switched on by server request")
+                    });
+                    gpio.write(15, false, function(){
+                        console.log("switched on by server request")
+                    });
+                    break;
+                case "switch_off\n":
+                    gpio.write(11,true,function(){
+                        console.log("switched off by server request")
+                    })
+                    gpio.write(13,true,function(){
+                        console.log("switched off by server request")
+                    })
+                    gpio.write(15,true,function(){
+                        console.log("switched off by server request")
+                    })
+                    break;
+                case "exit_app\n":
+                    gpio_reset();
                 default:
 
             }
-            console.log( data.toString());
+            console.log("Recieved message: "+data.toString());
         } );
     } );
     request.end();
@@ -81,15 +106,17 @@ function write() {
             delayedWrite(15, false, callback);
         },
     ], function(err, results) {
-        console.log('Writes complete, pause then unexport pins');
-        setTimeout(function() {
-            gpio.destroy(function() {
-                console.log('Closed pins, now exit');
-            });
-        }, 500);
+        console.log('Setup complete');
+
     });
 };
- 
+
+function gpio_reset(){
+    gpio.destroy(function(){
+        console.log('Closed pins, now exit')
+        process.exit()
+    })
+}
 function delayedWrite(pin, value, callback) {
     setTimeout(function() {
         gpio.write(pin, value, callback);
