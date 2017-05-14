@@ -5,18 +5,10 @@
     border: 1px solid #e0e0e0;
     box-shadow: 0px 0px 8px 4px #e0e0e0;
     display: inline-block;
+    margin: 15px;
 }
 
-.invis {
-    display: none;
-}
-
-html {
-    width: 100vw;
-    height: 100vh;
-    z-index: 1;
-}
-
+/* Class for displaying graphs */
 .graph {
     width: 800px;
     height: 300px;
