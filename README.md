@@ -8,7 +8,7 @@
 
 Βήματα εγκατάστασης Server, σε οποιοδήποτε υπολογιστή με MySql 
 
-git clone <>
+git clone https://github.com/crowdhackathon-smartcity/istdev.git
 
 Για την εγκατάσταση των dependencies:
 
@@ -21,7 +21,7 @@ node bin/www
 -------------------------------------------------------
 Βήματα εγκατάστασης Client, σε raspberry-pi
 
-git clone <>
+git clone https://github.com/crowdhackathon-smartcity/istdev.git
 
 Για την εγκατάσταση των dependencies
 
