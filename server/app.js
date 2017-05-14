@@ -27,15 +27,40 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/priority', priority_request)
 app.use('/measurements', measurements)
 
+//Handle for the keep-alive connection with the clients.
+//The clients will connect to this hook and will listen for messages/commands to execute
+app.get('/update', updateMiddleware);
+
+function updateMiddleware(req, res) {
+    res.setHeader('Connection', 'keep-alive');
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.writeHead(200);
+    setTimeout(function() {
+        res.write("this is an event\n");
+        res.flushHeaders();
+    }, 1000);
+    setTimeout(function() {
+        res.write("measurements\n");
+    }, 9000);
+    setTimeout(function() {
+        res.write("multi thread magics\n");
+    }, 9000);
+    setTimeout(function() {
+        res.write("measurements\n");
+    }, 14000);
+}
+
 //Handles POST requests to measurements endpoint.
 //Allows the client to add new measurements to the system
 app.post('/measurements', function(req, res) {
-    var machine_id = req.query.machine_id;
-    var api_key = req.query.apikey;
-    var value = req.query.value;
-    var timestamp = req.query.timestamp;
+    //Required POST parameters
+    var machine_id = req.body.machine_id;
+    var api_key = req.body.apikey;
+    var value = req.body.value;
+    var timestamp = req.body.timestamp;
     if(api_key != null){
-        database.validateApiKey(req.query.apikey,function (error, results) {
+        database.validateApiKey(req.body.apikey,function (error, results) {
             if (error) throw error;
 
             if (results.length > 0) {
@@ -43,7 +68,7 @@ app.post('/measurements', function(req, res) {
                 console.log('Request from: Api_Key[', api_key, ']');
                 if(machine_id != null && value != null && timestamp != null){
                     database.new_measurement(machine_id,value,timestamp, function(error,results){
-                        console.log("New shit in db");
+                        console.log("New Measurement for machine: "+machine_id+ " stored");//Oops
                         res.send("");
                     })
                 }else{ res.send("Error: Missing data. Required: machine_id, value, timestamp, apikey")}
